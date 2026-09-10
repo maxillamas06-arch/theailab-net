@@ -4,6 +4,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet"/>
 <title>Assignments – IPHS 400: Frontiers in AI</title>
 <link href="../css/style.css" rel="stylesheet"/>
 </head>
@@ -28,6 +31,7 @@
 
 <p>Four mini-projects stack on each other over the semester, followed by an original interdisciplinary Final Project. Each mini-project must include a README and a Generative AI Use Statement (see the <a href="policies.html">Policies</a> page).</p>
 
+<div class="section">
 <h2>Summary of Assignments and Weights</h2>
 <table>
 <tr><th>Assignment</th><th>Weight</th><th>Due</th></tr>
@@ -44,29 +48,39 @@
 </table>
 
 <p>All submissions go through Moodle, with a link to a GitHub repository that is either public or privately shared with the instructor (add the instructor's GitHub account as a collaborator). Repositories must be accessible at the deadline.</p>
+</div>
 
+<div class="section">
 <h2>Mini-Project 1 — Development Environment Configuration</h2>
 <p><strong>5%, Pass/No-Pass. Due Friday, September 4.</strong></p>
 <p>Configure a professional shell/terminal environment with documented customizations (e.g., zsh + <code>.zprofile</code>/<code>.zshrc</code>, XDG base directories, a modern CLI toolkit such as <code>ripgrep</code>, <code>fzf</code>, <code>bat</code>, <code>eza</code>, <code>tmux</code>; VS Code with relevant extensions).</p>
 <p><strong>Deliverable:</strong> a GitHub dotfiles repository (public recommended for portfolio value, or privately shared) with a README documenting your configuration choices and rationale, and a <code>.gitignore</code> showing secrets hygiene. Graded pass/no-pass on completeness and documentation quality.</p>
+</div>
 
+<div class="section">
 <h2>Mini-Project 2 — AI Coding Agent Configuration</h2>
 <p><strong>5%, Pass/No-Pass. Due Friday, September 25.</strong></p>
 <p><em>High-level workflow pack.</em> Package 3–5 reusable Claude Code customizations (Skills, a slash command, and/or a subagent) into a small project plugin a classmate can install. The point is to get repeated prompts out of chat and out of <code>CLAUDE.md</code> and into invocable playbooks that speed up review, status checks, and explanation.</p>
 <p><strong>Deliverable:</strong> the plugin repository plus a short (≤3 min) recorded or live demo showing both a typed <code>/command</code> and an auto-triggered Skill.</p>
+</div>
 
+<div class="section">
 <h2>Mini-Project 3 — Agent Harness and Hooks</h2>
 <p><strong>10%, graded. Due Friday, October 23 (demos Tuesday, October 27).</strong></p>
 <p><em>Low-level reliability harness.</em> Add 3–5 lifecycle hooks so the agent formats, logs, injects repo state, or blocks dangerous commands whether or not the model "remembers" the rules.</p>
 <p>Requirements: at least one hook must <strong>deny</strong> a tool call (e.g., destructive <code>git</code>/<code>rm</code> commands); at least one must produce a <strong>side effect</strong> such as lint-on-write or a Stop check that verifies tests actually ran; and the harness must integrate <strong>at least one FOSS extension</strong> from the ecosystem surveyed in Week 8 (observability/usage monitoring, context-engineering utilities, session-history tools, etc.), with the choice justified in the README.</p>
 <p><strong>Deliverable:</strong> the hook configuration, a trace or log showing that the runtime (not the prompt) enforced the behavior, and a 5-minute in-class demo (Week 10) walking through the deny-hook, the side-effect hook, and the trace.</p>
+</div>
 
+<div class="section">
 <h2>Mini-Project 4 — SWE/SDLC Best Practices Capstone</h2>
 <p><strong>10%, graded. Due Friday, November 20 (presentations Nov 17/19).</strong></p>
 <p>Take a real-world, high-impact, non-trivial greenfield web application (instructor-supplied, or self-scoped and instructor-approved) from ideation to a robust minimum viable product (MVP) using a complete spec-driven software development lifecycle: <strong>plan → decompose → implement → test → review</strong>, with <strong>deploy</strong> optional but strongly encouraged (e.g., GitHub Pages, Netlify, or Vercel).</p>
 <p>Use the harness you built in MP1–3. Must include at least one instance of multi-agent/subagent orchestration (parallel dispatch, isolated worktrees, or a reviewer/implementer split) and a CI check (GitHub Actions) that runs the test suite on pull requests.</p>
 <p><strong>Deliverable:</strong> the repository (spec documents, PR history, CI runs, README), plus a 5-minute in-class presentation (Week 13). Graded on process adherence, final PR/deliverable quality, and documentation.</p>
+</div>
 
+<div class="section">
 <h2>Final Project</h2>
 <p><strong>20%. Due exam period, December 14–18.</strong></p>
 <p>An original interdisciplinary research project that puts the MP1–4 agent harness to work on a real research question of your choosing, applying at least one key technique from the mini-projects.</p>
@@ -87,7 +101,9 @@
 <li><strong>Portfolio publication:</strong> Submit the signed Kenyon Digital Release Form for publication to digital.kenyon.edu/dh, or notify the instructor by Friday, November 13 to opt into the 3-hour written exam alternative instead.</li>
 <li><strong>Moodle check:</strong> Confirm all grades, quizzes, and presentations are accurately recorded on Moodle.kenyon.edu before the end of the exam period.</li>
 </ol>
+</div>
 
+<div class="section">
 <h2>Mini-Project 3 &amp; 4 Grading Rubric</h2>
 <p>Each graded mini-project (MP3, MP4) is evaluated on:</p>
 <table>
@@ -100,11 +116,13 @@
 </table>
 
 <p><strong>Pass/No-Pass mini-projects (MP1, MP2):</strong> Pass earns the full 5%. It requires a working, documented deliverable that meets all stated requirements, submitted on time. A No-Pass earns 0% until resubmitted; one resubmission within one week of feedback is allowed for up to full credit, at instructor discretion.</p>
+</div>
 
 </div>
 </main>
 <footer class="site-footer">
 <p>IPHS 400: Frontiers in AI · Kenyon College</p>
 </footer>
+<script defer src="../assets/site.js"></script>
 </body>
 </html>

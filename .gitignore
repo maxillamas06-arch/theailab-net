@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# mi-sitio (Next.js scaffold)
+mi-sitio/node_modules/

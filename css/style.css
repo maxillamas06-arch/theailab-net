@@ -1,24 +1,36 @@
-/* Twenty Nineteen-faithful theme for Programming Humanity
-   Design tokens measured from programminghumanity.wordpress.com (2026-08-25):
-   serif body 22px/1.8, bold sans headings, primary #0073a8, grayscale+blue
-   duotone featured-image headers with bottom-left entry title. */
+/* Modern tech/dev-site theme for IPHS 400: Frontiers in AI.
+   Clean sans for nav/UI, a warm humanist serif (Fraunces) for editorial
+   headings, indigo/violet gradient header with a warm accent to keep it
+   from reading as flat/generic, and light vanilla-JS interactivity
+   (see assets/site.js). */
 
 :root {
   --bg: #fff;
-  --text: #111;
-  --text-lt: #767676;
-  --accent: #0073aa;
-  --accent-dk: #005177;
-  --primary: #0073a8;      /* duotone / hero tint */
-  --border: #e0e0e0;
-  --code-bg: #f5f5f5;
-  --draft: #ff9800;
-  --priv: #e91e63;
-  --fh: "NonBreakingSpaceOverride", "Hoefler Text", Garamond, "Times New Roman", serif;
-  --fb: "NonBreakingSpaceOverride", -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  --mw: 640px;             /* text column measure */
+  --text: #171519;
+  --text-lt: #666;
+  --accent: #4f46e5;        /* indigo-600, 6.3:1 on white */
+  --accent-dk: #4338ca;     /* indigo-700, 7.9:1 on white */
+  --warm: #c2410c;          /* burnt orange, 5.2:1 on white — the one warm note */
+  --warm-lt: #fdba74;       /* warm accent for use on the dark gradient */
+  --border: #e2e2e8;
+  --code-bg: #f4f4fa;
+  --tint: #f6f6fd;          /* alternating section background */
+  --shadow: rgba(30, 27, 75, 0.12);
+
+  /* header/hero gradient */
+  --grad-1: #0b1226;
+  --grad-2: #1e2a5e;
+  --grad-3: #4c1d95;
+  --on-grad: #fff;
+  --on-grad-lt: rgba(255, 255, 255, 0.72);
+  --on-grad-accent: #c7d2fe;  /* indigo-200, hover/active on the gradient header */
+
+  --fh: "NonBreakingSpaceOverride", -apple-system, "Segoe UI", Inter, Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --fb: var(--fh);
+  --fd: "Fraunces", Georgia, "Times New Roman", serif;  /* editorial/display headings only */
+  --mw: 680px;              /* text column measure */
   --mww: 1168px;
-  --col-left: calc(8.33vw + 28px);  /* left offset of the content column */
+  --col-left: clamp(28px, 8.33vw + 28px, 220px);  /* left offset, capped on wide screens */
 }
 
 /* Reset */
@@ -26,11 +38,15 @@
 
 body {
   margin: 0;
-  font-family: var(--fh);      /* serif reading text (Twenty Nineteen) */
-  font-size: 22px;
-  line-height: 1.8;
+  font-family: var(--fb);
+  font-size: 18px;
+  line-height: 1.65;
   color: var(--text);
   background: var(--bg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  * { scroll-behavior: smooth; }
 }
 
 a {
@@ -38,9 +54,15 @@ a {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
+  transition: color 0.15s ease;
 }
 a:hover {
   color: var(--accent-dk);
+}
+a:focus-visible {
+  outline: 2px solid var(--accent-dk);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 img {
@@ -60,10 +82,37 @@ h1, h2, h3, h4, h5, h6 {
 /* ===================== */
 
 .site-header {
-  position: relative;
-  color: var(--text);
-  background: var(--bg);
-  padding: 44px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  overflow: hidden;
+  color: var(--on-grad);
+  background: linear-gradient(135deg, var(--grad-1), var(--grad-2) 55%, var(--grad-3));
+  padding: 28px 0 0;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+  transform: translateY(0);
+  transition: padding 0.2s ease, transform 0.3s ease;
+}
+/* Slides fully out of view while scrolling down, so reading gets the
+   whole screen; reappears the moment you scroll back up. */
+.site-header.header-hidden {
+  transform: translateY(-100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header { transition: padding 0.2s ease; }
+}
+/* Condensed state: the large title has collapsed (see .hero below). */
+
+/* A faint diagonal wash of light, not a glowing orb — the classic
+   "colorful blurred blob" is as much an AI-template cliché at this
+   point as the flat gradient it was meant to fix. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(115deg, transparent 40%, rgba(253, 186, 116, 0.08) 60%, transparent 78%);
+  pointer-events: none;
 }
 
 /* --- Featured-image variant: full-viewport duotone hero --- */
@@ -115,10 +164,10 @@ h1, h2, h3, h4, h5, h6 {
   column-gap: 0.75rem;
 }
 .site-title {
-  font-family: var(--fb);
-  font-size: 24.75px;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  font-family: var(--fd);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
   margin: 0;
   line-height: 1.2;
 }
@@ -143,11 +192,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.01em;
   margin: 0;
   line-height: 1.25;
-  opacity: 1;
-}
-.site-header.no-featured-image .site-description,
-.site-header.no-featured-image .site-title .tagline {
-  color: var(--text-lt);
+  color: var(--on-grad-lt);
 }
 
 /* Navigation */
@@ -164,25 +209,49 @@ h1, h2, h3, h4, h5, h6 {
   column-gap: 1.5rem;
 }
 .main-nav li a {
-  color: inherit;
+  position: relative;
+  display: inline-block;
+  color: var(--on-grad-lt);
   font-family: var(--fb);
   font-weight: 700;
-  font-size: 24.75px;
-  letter-spacing: -0.02em;
+  font-size: 20px;
+  letter-spacing: -0.01em;
   text-transform: none;
-  padding: 0;
+  padding: 0 0 3px;
   text-decoration: none;
+  transition: color 0.15s ease;
+}
+/* Underline grows in from the left instead of snapping on/off */
+.main-nav li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--on-grad-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .main-nav li a:hover,
-.main-nav li a.active {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-  color: inherit;
+.main-nav li a.active,
+.main-nav li a[aria-current="page"] {
+  color: var(--on-grad-accent);
   background: none;
 }
-.site-header.no-featured-image .main-nav li a {
-  color: var(--accent);
+.main-nav li a:hover::after,
+.main-nav li a.active::after,
+.main-nav li a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+.main-nav li a:focus-visible {
+  outline: 2px solid var(--on-grad-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .main-nav li a::after { transition: none; }
 }
 
 .social-nav {
@@ -213,30 +282,80 @@ h1, h2, h3, h4, h5, h6 {
   margin: 3rem 0 0 var(--col-left);
   max-width: calc(var(--mw) + 4rem);
   padding-right: 2rem;
+  overflow: hidden;
+  opacity: 1;
+  /* --hero-h is measured by assets/site.js (actual content height, so
+     titles of any length collapse cleanly); the fallback covers the
+     instant before JS runs. */
+  max-height: var(--hero-h, 260px);
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.4s ease;
 }
 .hero h1 {
-  font-family: var(--fb);
-  font-size: 49.5px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  font-family: var(--fd);
+  font-size: 52px;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   margin: 0;
   max-width: none;
 }
+.hero-tagline {
+  font-family: var(--fb);
+  font-size: 19px;
+  font-weight: 400;
+  color: var(--on-grad-lt);
+  max-width: 34ch;
+  margin: 0.9rem 0 0;
+  line-height: 1.5;
+}
+/* A loose, hand-drawn-feeling squiggle instead of a ruler-straight rule —
+   the single straight line was one of the more machine-made-looking
+   details on the page. */
 .hero h1::before {
   content: "";
   display: block;
-  width: 2.2em;
-  height: 2px;
-  margin-bottom: 1rem;
-  background: currentColor;
+  width: 96px;
+  height: 16px;
+  margin-bottom: 1.1rem;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 16'><path d='M2 11 Q 16 2, 28 9 T 54 8 Q 66 4, 78 10 T 104 7 T 118 9' stroke='%23fdba74' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat left center;
+  background-size: contain;
 }
 .site-header.no-featured-image .hero {
-  margin-top: 4rem;
-  margin-bottom: 0.5rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
 }
-.site-header.no-featured-image .hero h1::before {
-  background: var(--text-lt);
+
+/* Large title collapses to nothing as you scroll; a small compact title
+   (injected by assets/site.js from the hero's own text — no markup
+   duplication needed) fades in beside the branding to replace it. */
+.site-header.is-scrolled .hero {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.compact-title {
+  display: none;
+  font-family: var(--fd);
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--on-grad);
+  opacity: 0;
+}
+.site-header.is-scrolled .compact-title {
+  display: inline-block;
+  animation: compactTitleIn 0.35s ease 0.1s both;
+}
+@keyframes compactTitleIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero { transition: none; }
+  .compact-title { animation: none; }
+  .site-header.is-scrolled .compact-title { opacity: 1; }
 }
 
 /* ===================== */
@@ -247,6 +366,33 @@ h1, h2, h3, h4, h5, h6 {
   max-width: calc(var(--mw) + 4rem);
   margin: 0 0 0 var(--col-left);
   padding: 2.5rem 2rem 4rem 0;
+}
+
+/* Gentle entrance on load, applies to every page with zero markup changes */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.page-content {
+  animation: fadeInUp 0.5s ease both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-content { animation: none; }
+}
+
+/* Scroll-triggered reveal (opt-in class added by assets/site.js only —
+   content is fully visible with no animation at all if JS never runs) */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-init.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init { opacity: 1; transform: none; transition: none; }
 }
 
 /* Breadcrumbs (repo addition — quiet) */
@@ -333,24 +479,46 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text);
 }
 
-/* Page content typography */
+/* Page content typography — sans for structural h4 (small, label-like),
+   the warm serif for h2/h3 so a long page reads as written, not templated */
 .page-content h1,
 .page-content h2,
-.page-content h3,
+.page-content h3 {
+  font-family: var(--fd);
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
 .page-content h4 {
   font-family: var(--fb);
+  font-weight: 700;
   color: var(--text);
   margin-top: 2rem;
   margin-bottom: 0.8rem;
   line-height: 1.2;
 }
 
-.page-content h2 { font-size: 36px; }
-.page-content h3 { font-size: 28px; }
-.page-content h4 { font-size: 22px; }
+.page-content h2 { font-size: 34px; }
+.page-content h3 { font-size: 26px; }
+.page-content h4 { font-size: 19px; }
 
 .page-content p {
   margin: 1.5rem 0;
+}
+.page-content p.lead {
+  font-family: var(--fd);
+  font-size: 26px;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+  margin: 0.5rem 0 1.75rem;
+}
+.page-content p.lead strong {
+  font-style: normal;
 }
 
 .page-content blockquote {
@@ -413,6 +581,12 @@ h1, h2, h3, h4, h5, h6 {
 .page-content th {
   background: var(--code-bg);
   font-weight: 700;
+}
+.page-content tr {
+  transition: background-color 0.15s ease;
+}
+.page-content tr:hover td {
+  background: var(--tint);
 }
 
 .page-content figure {
@@ -504,12 +678,28 @@ h1, h2, h3, h4, h5, h6 {
 /* ===================== */
 
 .section {
-  margin-bottom: 2.5rem;
+  position: relative;
+  margin-bottom: 2rem;
+  padding: 1.75rem;
+  border-radius: 14px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .section:hover {
+    box-shadow: 0 6px 20px var(--shadow);
+  }
+}
+/* Alternating tint bands so long pages (Syllabus, Policies) read as
+   distinct blocks instead of one unbroken wall of text */
+.section:nth-of-type(even) {
+  background: var(--tint);
 }
 .section h2 {
-  font-family: var(--fb);
+  font-family: var(--fd);
+  font-weight: 600;
   color: var(--text);
   font-size: 32px;
+  margin-top: 0;
 }
 
 .item-list {
@@ -517,11 +707,78 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
 }
 .item-list li {
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.5rem;
+  margin: 0 -0.5rem;
   border-bottom: 1px solid #f0f0f0;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, padding-left 0.15s ease;
+}
+.item-list li:hover {
+  background: var(--code-bg);
+  padding-left: 0.85rem;
 }
 .item-list li:last-child {
   border-bottom: none;
+}
+
+/* Card-grid variant for a small set of destination links (e.g. the
+   homepage's Quick Links) — buttons to press, not a list to read. */
+.item-list.link-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+.item-list.link-grid li {
+  margin: 0;
+  padding: 0;
+  border-bottom: none;
+  border-radius: 10px;
+  background: var(--tint);
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.item-list.link-grid li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px var(--shadow);
+  background: #fff;
+  padding-left: 0;
+}
+.item-list.link-grid a {
+  display: block;
+  padding: 1.1rem 1.25rem;
+  font-family: var(--fb);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 10px;
+}
+.item-list.link-grid a:hover {
+  color: var(--accent-dk);
+}
+@media (prefers-reduced-motion: reduce) {
+  .item-list.link-grid li:hover { transform: none; }
+}
+
+/* Items step in one at a time as their section reveals, instead of the
+   whole list appearing as one flat block */
+.reveal-init .item-list li {
+  opacity: 0;
+  transform: translateX(-8px);
+}
+.reveal-init.reveal-visible .item-list li {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.reveal-init.reveal-visible .item-list li:nth-child(1) { transition-delay: 0.04s; }
+.reveal-init.reveal-visible .item-list li:nth-child(2) { transition-delay: 0.08s; }
+.reveal-init.reveal-visible .item-list li:nth-child(3) { transition-delay: 0.12s; }
+.reveal-init.reveal-visible .item-list li:nth-child(4) { transition-delay: 0.16s; }
+.reveal-init.reveal-visible .item-list li:nth-child(5) { transition-delay: 0.2s; }
+.reveal-init.reveal-visible .item-list li:nth-child(n+6) { transition-delay: 0.24s; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init .item-list li { opacity: 1; transform: none; transition: none; }
 }
 
 .columns {
@@ -562,6 +819,119 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ===================== */
+/*   Scroll progress bar */
+/*   (injected by assets/site.js) */
+/* ===================== */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--warm));
+  z-index: 50;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { transition: none; }
+}
+
+/* ===================== */
+/*   Current-week badge  */
+/*   (Schedule page only, injected by assets/site.js) */
+/* ===================== */
+
+.item-list li.is-current-week {
+  background: var(--tint);
+  border-radius: 6px;
+  padding-left: 0.85rem;
+}
+.current-week-badge {
+  display: inline-block;
+  margin-left: 0.65rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--fb);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+}
+
+/* ===================== */
+/*   Deadline banner     */
+/*   (Assignments page only, injected by assets/site.js) */
+/* ===================== */
+
+.deadline-banner {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  background: var(--tint);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.6rem 1.15rem;
+  font-family: var(--fb);
+  font-size: 15px;
+  color: var(--text);
+  margin: 0 0 1.75rem;
+}
+.deadline-banner strong {
+  color: var(--accent-dk);
+}
+
+/* ===================== */
+/*   Back-to-top button  */
+/*   (injected by assets/site.js; styled here so it's ready to use) */
+/* ===================== */
+
+.back-to-top {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 18px;
+  text-decoration: none;
+  box-shadow: 0 6px 20px var(--shadow);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.15s ease;
+  z-index: 30;
+}
+.back-to-top.is-visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.back-to-top:hover {
+  background: var(--accent-dk);
+  transform: scale(1.08);
+}
+.back-to-top.is-visible:hover {
+  transform: scale(1.08);
+}
+.back-to-top:focus-visible {
+  outline: 2px solid var(--accent-dk);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top { transition: opacity 0.01s linear; }
+}
+
+/* ===================== */
 /*   Responsive          */
 /* ===================== */
 
@@ -573,40 +943,53 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
   body {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   :root {
     --col-left: 1rem;
   }
 
-  /* Live-site mobile behavior: hero collapses to a solid primary block */
-  .site-header.has-featured-image {
-    background: var(--primary);
-    padding: 44px 0 56px;
-  }
-  .featured-media {
-    display: none;
-  }
-
   .site-header {
-    padding-top: 32px;
+    padding-top: 18px;
+  }
+  .site-header.is-scrolled {
+    padding-top: 12px; /* compacts further once scrolled, so the sticky bar stays out of the way */
+    padding-bottom: 6px;
   }
 
   .site-title,
   .site-sep,
   .site-description,
-  .site-title .tagline,
+  .site-title .tagline {
+    font-size: 19px;
+  }
   .main-nav li a {
-    font-size: 20px;
+    font-size: 17px;
+  }
+  .main-nav ul {
+    column-gap: 1rem;
+    row-gap: 0.5rem;
   }
 
   .hero h1 {
-    font-size: 34px;
+    font-size: 32px;
   }
 
   .content-wrapper {
     padding: 2rem 1rem 3rem 0;
+  }
+
+  .section {
+    padding: 1.25rem;
+    border-radius: 10px;
+  }
+
+  .back-to-top {
+    right: 1rem;
+    bottom: 1rem;
+    width: 40px;
+    height: 40px;
   }
 
   .columns {

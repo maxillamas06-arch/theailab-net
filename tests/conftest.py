@@ -12,10 +12,11 @@ def site_root():
 
 @pytest.fixture(scope="session")
 def all_html_files(site_root):
-    """All HTML files in the site, excluding .venv."""
+    """All HTML files in the site, excluding .venv and mi-sitio."""
+    excluded = {".venv", "mi-sitio"}
     return sorted(
         f for f in site_root.rglob("*.html")
-        if ".venv" not in f.relative_to(site_root).parts
+        if excluded.isdisjoint(f.relative_to(site_root).parts)
     )
 
 
