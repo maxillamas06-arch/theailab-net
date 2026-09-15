@@ -51,7 +51,66 @@
     addScrollProgressBar();
     highlightCurrentWeek();
     addNextDeadlineBanner();
+    addHomepageHighlights();
   });
+
+  /** On the homepage, fill in the "Where We Are" card with the current
+   *  week and next deadline, reusing the same verified date data as the
+   *  Schedule/Assignments pages. If JS doesn't run, the card still shows
+   *  a plain sentence pointing to those pages instead of being empty. */
+  function addHomepageHighlights() {
+    var container = document.getElementById("this-week-card");
+    if (!container) return;
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    var week = COURSE_WEEKS.filter(function (w) {
+      return today >= new Date(w.start + "T00:00:00") && today <= new Date(w.end + "T00:00:00");
+    })[0];
+
+    var upcoming = COURSE_DEADLINES.map(function (d) {
+      return { label: d.label, date: new Date(d.date + "T00:00:00") };
+    })
+      .filter(function (d) {
+        return d.date >= today;
+      })
+      .sort(function (a, b) {
+        return a.date - b.date;
+      })[0];
+
+    if (!week && !upcoming) return;
+
+    var list = document.createElement("ul");
+    list.className = "item-list";
+
+    if (week) {
+      var weekNum = week.n < 10 ? "0" + week.n : "" + week.n;
+      var li1 = document.createElement("li");
+      var a1 = document.createElement("a");
+      a1.href = "weeks/week-" + weekNum + ".html";
+      a1.textContent = "This week: Week " + week.n;
+      li1.appendChild(a1);
+      list.appendChild(li1);
+    }
+
+    if (upcoming) {
+      var days = Math.round((upcoming.date - today) / 86400000);
+      var dayLabel = days === 0 ? "today" : days === 1 ? "tomorrow" : "in " + days + " days";
+      var dateStr = upcoming.date.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      });
+      var li2 = document.createElement("li");
+      li2.textContent = "Next deadline: " + upcoming.label + " — " + dateStr + " (" + dayLabel + ")";
+      list.appendChild(li2);
+    }
+
+    var note = container.querySelector(".js-only-note");
+    if (note) note.remove();
+    container.appendChild(list);
+  }
 
   /** A thin bar at the very top of the viewport that fills left-to-right
    *  as you scroll through the page. */
